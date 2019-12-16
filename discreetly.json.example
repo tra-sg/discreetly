@@ -1,0 +1,10 @@
+{
+  "acme-aws": {
+    "type": "aws"
+  },
+  "default": {
+    "type": "gcp",
+    "datastore_project": "acme-corp",
+    "keyid": "projects/acme-corp-kms/locations/global/keyRings/discreetly/cryptoKeys/default"
+  }
+}
