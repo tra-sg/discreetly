@@ -1,0 +1,51 @@
+name: Publish to PyPI and TestPyPI
+
+on: [push]
+
+jobs:
+  build-n-publish:
+    name: Build and publish to PyPI and TestPyPI
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.7]
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade tox
+      - name: Set SETUPTOOLS_SCM_PRETEND_VERSION environment variable
+        # Test PyPI does not accept PEP 440 local versions, e.g.:
+        #   discreetly-0.0.3.dev20+g49004ca.d20191218
+        # So we set SETUPTOOLS_SCM_PRETEND_VERSION to something like:
+        #   0.0.1576661604
+        # which is "0.0." prepended to the number of seconds since the EPOCH
+        run: |
+          echo "::set-env name=SETUPTOOLS_SCM_PRETEND_VERSION::$(printf '0.0.%(%s)T' -1)"
+      - name: Build test dists
+        run: |
+          python -m tox -e build-test-dists --parallel 0
+      - name: Publish distribution to Test PyPI
+        # Using master until https://github.com/pypa/gh-action-pypi-publish/pull/21 lands in a release
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.test_pypi_token }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: build/testdist/
+      - name: Build dists
+        run: |
+          python -m tox -e build-dists --parallel 0
+      - name: Publish distribution to PyPI
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        uses: pypa/gh-action-pypi-publish@v1.0.0a0
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_token }}
