@@ -1,3 +1,7 @@
+![](https://github.com/tra-sg/discreetly/workflows/Tests/badge.svg)
+[![PyPI version fury.io](https://badge.fury.io/py/discreetly.svg)](https://pypi.python.org/pypi/discreetly/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/discreetly.svg)](https://pypi.python.org/pypi/discreetly/)
+
 # discreetly
 
 ## A secrets manager for AWS and GCP
@@ -45,7 +49,7 @@ $ pip install discreetly[aws,gcp]
   },
   "default": {
     "type": "gcp",
-    "datastore_project": "acme",
+    "datastore_project": "acme-corp",
     "keyid": "projects/acme-corp-kms/locations/global/keyRings/discreetly/cryptoKeys/default"
   }
 }
@@ -53,7 +57,7 @@ $ pip install discreetly[aws,gcp]
 
 In the above example, the configuration contains two profiles, "acme" and "default". A profile must specify a `type`, either "aws" or "gcp".
 
-Because profile can specify a `keyid`, you can have named profiles not only for different cloud providers but for different KMS keys, e.g. one for dev, another for prod.
+Because a profile can specify a `keyid`, you can have named profiles not only for different cloud providers but for different KMS keys, e.g. one for dev, another for prod.
 
 `discreetly` will search for a configuration file at the location provided by the environment variable `DISCREETLY_CONFIG_FILE`, falling back to a file named `discreetly.json` in the current directory.
 
