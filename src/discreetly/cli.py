@@ -1,10 +1,15 @@
+"""Command line interface for discreetly.
+
+"""
+
 import click
 import json
 import logging
+import os
 import discreetly
 
-logging.basicConfig(level=logging.DEBUG)
-logging.getLogger("discreetly").addHandler(logging.StreamHandler())
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "WARN"))
+logging.getLogger(__name__)
 
 
 @click.group()

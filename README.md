@@ -79,6 +79,12 @@ Because a profile can specify a `keyid`, you can have named profiles not only fo
 
 Most issues are related to authentication or permissions with your cloud provider.
 
+With the `discreetly` cli, you can also change the logging level by setting the `LOGLEVEL` environment variable, e.g.
+
+```console
+$ LOGLEVEL=DEBUG discreetly get my/super/secret
+```
+
 ### AWS
 
 Verify that you can use the AWS CLI to access Parameter Store, e.g.:
