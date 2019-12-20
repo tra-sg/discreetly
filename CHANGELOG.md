@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Use `LOGLEVEL` environment variable to set log level in the cli
+
 ## [0.1.0] - 2019-12-18
 
 ### Added
