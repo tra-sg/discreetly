@@ -9,13 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Use `LOGLEVEL` environment variable to set log level in the cli
+## [v0.1.1] - 2019-12-24
 
-## [0.1.0] - 2019-12-18
+### Added
+
+- Use `LOGLEVEL` environment variable to set log level in the cli ([#1])
+
+## [v0.1.0] - 2019-12-18
 
 ### Added
 
 - Initial release: support for AWS KMS + Parameter Store and GCP KMS + Datastore
 
 [unreleased]: https://github.com/tra-sg/discreetly/compare/v0.1.0...HEAD
-[0.0.1]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.0
+[v0.1.1]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.1
+[v0.1.0]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.0
+[#1]: https://github.com/tra-sg/discreetly/issues/1

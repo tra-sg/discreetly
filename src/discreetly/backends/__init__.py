@@ -2,6 +2,8 @@ from abc import abstractmethod
 
 
 class AbstractBackend(object):
+    """Base class for discreetly backends."""
+
     def __init__(self, config, *args, **kwargs):
         self.config = config
         super(AbstractBackend, self).__init__()
