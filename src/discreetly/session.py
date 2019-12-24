@@ -35,7 +35,7 @@ class Session(AbstractBackend):
                 self.config = json.load(configfile)
 
         logger.debug(
-            "config:\n" + json.dumps(self.config, sort_keys=True, indent=4)
+            "config:\n%s", json.dumps(self.config, sort_keys=True, indent=4)
         )
 
         self.profile = self.config.get(profile)
@@ -43,7 +43,7 @@ class Session(AbstractBackend):
             raise KeyError('Invalid profile: "%s"' % profile)
 
         logger.debug(
-            "profile:\n" + json.dumps(self.profile, sort_keys=True, indent=4)
+            "profile:\n%s", json.dumps(self.profile, sort_keys=True, indent=4)
         )
 
         type = self.profile.get("type")

@@ -18,8 +18,6 @@ Applications often require access to secrets such as database passwords or API k
 
 `discreetly` provides a consistent API for managing secrets across both AWS and GCP. It encourages you to partition your secrets and encryption keys so that your web application only has access to the secrets it needs to run and not, for example, access to infrastructure secrets only needed by your infrastructure management tools.
 
----
-
 ## Installation
 
 `discreetly` does not set up any infrastructure for you. At a minimum, you need to have i) credentials available for authenticating with AWS and/or Google, ii) permissions to use KMS to encrypt and decrypt secrets, and iii) permissions to read/write to the underlying store.
@@ -35,8 +33,6 @@ For use as a library, install `discreetly` specifying which backends you need to
 ```console
 $ pip install discreetly[aws,gcp]
 ```
-
----
 
 ## Configuration
 
@@ -61,8 +57,6 @@ Because a profile can specify a `keyid`, you can have named profiles not only fo
 
 `discreetly` will search for a configuration file at the location provided by the environment variable `DISCREETLY_CONFIG_FILE`, falling back to a file named `discreetly.json` in the current directory.
 
----
-
 ## Frequently Asked Questions (FAQ)
 
 1. What about credstash/Chamber/Vault/etc.?
@@ -72,8 +66,6 @@ Because a profile can specify a `keyid`, you can have named profiles not only fo
    Chamber is excellent choice, especially in a Go environment or if you only need AWS support.
 
    Vault is great if you have the resources to support it.
-
----
 
 ## Troubleshooting
 
@@ -87,11 +79,15 @@ $ LOGLEVEL=DEBUG discreetly get my/super/secret
 
 ### AWS
 
-Verify that you can use the AWS CLI to access Parameter Store, e.g.:
+If you have the AWS CLI installed, verify that you can use it to access Parameter Store, e.g.:
 
 ```console
 $ aws ssm get-parameter /path/to/parameter --with-decryption
 ```
+
+If that works, then the problem may very well be with `discreetly` and you should consider opening an issue.
+
+However, if that's not working, it's likely a configuration or authentication issue. Under the hood, `discreetly` uses Boto 3, so consult their documentation on [setting up your authentication credentials](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#configuration).
 
 ### GCP
 
@@ -102,8 +98,6 @@ Verify that you've followed the steps in [Obtaining and providing service accoun
 1. Creating a service account
 2. Saving the JSON file for the service account locally
 3. Setting the path to the JSON file in the environment variable, `GOOGLE_APPLICATION_CREDENTIALS`
-
----
 
 ## Library usage
 
@@ -138,8 +132,6 @@ acme.set('acme/prod/postgres/password', 'super-secret', keyid='alias/prod_key')
 acme.get('acme/prod/postgres/password') # no need to specify the keyid for get
 ```
 
----
-
 ## Development
 
 `discreetly` is written in Python and supports Python 2.7 and 3.3+.
@@ -147,3 +139,37 @@ acme.get('acme/prod/postgres/password') # no need to specify the keyid for get
 After cloning the repo, run `pip install -r requirements.txt` to install the required development dependencies (e.g. pytest, flake8, etc.)
 
 You can run `pytest` to run the unit tests locally or `tox` to run all the tests under Python 2.7 and 3.x.
+
+### Releases
+
+- Review and update `CHANGELOG.md` in a new release branch
+
+  - The following will show commits since the last tag beginning with 'v':
+
+    ```console
+    $ git log $(git describe --tags --match "v*" --abbrev=0)..HEAD`
+    ```
+
+  - Replace `[Unreleased]` with the new [semver](https://semver.org/) and release date, e.g. `[0.1.2] - 2019-12-13`
+  - Add a new `[Unreleased]` placeholder above the new version you just created
+
+- Create a new PR
+
+  - The following lists all commits since the last tag, which may be useful for including in the PR description:
+
+    `git log --pretty=format:"* %h %s" $(git describe --tags --abbrev=0 @^)..@`
+
+- Once the PR is merged to master and passes all status checks, create and push a new signed, annotated tag, e.g.:
+
+  ```console
+  $ LAST_VERSION=$(git describe --tags --match "v*" --abbrev=0)
+  $ VERSION=v0.1.1
+  $ awk "/^## \[${VERSION}/{flag=1;}/## \[${LAST_VERSION}/{flag=0} flag" CHANGELOG.md | git tag -s -a v0.1.2 --cleanup=whitespace -F -
+  $ git push --follow-tags
+  ```
+
+  The `awk` command above grabs the contents of the CHANGELOG for `$VERSION` to include as the message for the annotated git tag. It's fairly brittle in its assumptions about the format of the CHANGELOG. so you might just run the awk command:
+
+  > `awk "/^## \[${VERSION}/{flag=1;}/## \[${LAST_VERSION}/{flag=0} flag" CHANGELOG.md`
+
+  as a sanity check before creating & pushing the tag.
