@@ -164,7 +164,7 @@ You can run `pytest` to run the unit tests locally or `tox` to run all the tests
   ```console
   $ LAST_VERSION=$(git describe --tags --match "v*" --abbrev=0)
   $ VERSION=v0.1.1
-  $ awk "/^## \[${VERSION}/{flag=1;}/## \[${LAST_VERSION}/{flag=0} flag" CHANGELOG.md | git tag -s -a v0.1.2 --cleanup=whitespace -F -
+  $ awk "/^## \[${VERSION}/{flag=1;}/## \[${LAST_VERSION}/{flag=0} flag" CHANGELOG.md | git tag -s -a ${VERSION} --cleanup=whitespace -F -
   $ git push --follow-tags
   ```
 
