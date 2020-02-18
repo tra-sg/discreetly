@@ -2,7 +2,7 @@
 [![PyPI version fury.io](https://badge.fury.io/py/discreetly.svg)](https://pypi.python.org/pypi/discreetly/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/discreetly.svg)](https://pypi.python.org/pypi/discreetly/)
 
-# discreetly
+# discreetly x
 
 ## A secrets manager for AWS and GCP
 
