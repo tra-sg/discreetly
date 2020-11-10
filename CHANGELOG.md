@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [v0.2.0] - 2020-10-10
+
+### Added
+
+- Fix `discreetly` to work with `google-cloud-kms` >= 2.0.0 ([#10])
+
 ## [v0.1.2] - 2020-10-10
 
 ### Added
@@ -29,10 +35,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release: support for AWS KMS + Parameter Store and GCP KMS + Datastore
 
-[unreleased]: https://github.com/tra-sg/discreetly/compare/v0.1.2...HEAD
-[v0.1.1]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.2
+[unreleased]: https://github.com/tra-sg/discreetly/compare/v0.2.0...HEAD
+[v0.2.0]: https://github.com/tra-sg/discreetly/releases/tag/v0.2.0
+[v0.1.2]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.2
 [v0.1.1]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.1
 [v0.1.0]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.0
 [#1]: https://github.com/tra-sg/discreetly/issues/1
 [#8]: https://github.com/tra-sg/discreetly/pull/8/
+[#10]: https://github.com/tra-sg/discreetly/pull/10/
 [#11]: https://github.com/tra-sg/discreetly/pull/11/
