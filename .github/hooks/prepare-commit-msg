@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# .github/hooks/prepare-commit-msg
+#
+# TLDR: enable shared repo hooks (requires git 2.8.0 or later) with
+#   git config core.hooksPath .github/hooks/
+#
+# This hook prepares a commit message template based on the
+# branch name. The branch name should be of the form:
+#   <name>#<shortLink>
+# OR
+#   <shortLink>/<idShort>-<name>
+#
+#
+# For example, a branch named either:
+#   grand-canyon-national-part#nqPiDKmw
+# or
+#   nqPiDKmw/grand-canyon-national-park
+#
+# generates a commit message like:
+#
+#   [#nqPiDKmw] Grand canyon national park
+#
+#   # Please enter the commit message for your changes. Lines starting
+#
+COMMIT_MSG_FILE=$1 # name of the file that contains the commit log message
+COMMIT_SOURCE=$2 # one of "message", "template", "merge", "squash" or "commit".
+SHA1=$3
+
+# Do not prepare commit message if COMMIT_SOURCE is one of message, merge, squash or commit
+if [[ $COMMIT_SOURCE == "message" || $COMMIT_SOURCE == "merge" || $COMMIT_SOURCE == "squash" || $COMMIT_SOURCE == "commit" ]]; then
+  exit
+fi
+
+# Branches to skip when prepending commit message.
+if [ -z "$BRANCHES_TO_SKIP" ]; then
+  BRANCHES_TO_SKIP=(master develop test)
+fi
+
+# Get the branch name or empty string (--quiet to avoid "fatal: ref HEAD is not a symbolic ref" when in detached HEAD)
+BRANCH_NAME=$(git symbolic-ref --quiet --short HEAD) # e.g. "grand-canyon-national-park#12345678"
+
+# Shell parameter expansion, see: https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
+
+if [ "${BRANCH_NAME:(-9):1}" = "#" ]; then
+  CARD_ID=${BRANCH_NAME##*#} # e.g. "12345678"
+  CARD_TITLE=${BRANCH_NAME%#*} # e.g. "grand-canyon-national-park"
+elif [ "${BRANCH_NAME:8:1}" = "/" ]; then
+  CARD_ID=${BRANCH_NAME%%/*} # e.g. "12345678"
+  CARD_TITLE=${BRANCH_NAME#*/} # e.g. "grand-canyon-national-park"
+fi
+
+CARD_TITLE=${CARD_TITLE//-/ } # Replace dashes with spaces, e.g. "grand canyon national park"
+CARD_TITLE=${CARD_TITLE^} # Uppercase first letter, e.g. "Grand canyon national park"
+
+BRANCH_EXCLUDED=$(printf "%s\n" "${BRANCHES_TO_SKIP[@]}" | grep -c "^$BRANCH_NAME$")
+BRANCH_IN_COMMIT=$(grep -c "\[$BRANCH_NAME\]" $COMMIT_MSG_FILE)
+
+if [ -n "$BRANCH_NAME" ] && ! [[ $BRANCH_EXCLUDED -eq 1 ]] && ! [[ $BRANCH_IN_COMMIT -ge 1 ]]; then
+  printf "[#%s] %s\n%s\n\n%s" "$CARD_ID" "$CARD_TITLE" "$(cat $COMMIT_MSG_FILE)"  > $COMMIT_MSG_FILE
+fi

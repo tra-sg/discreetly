@@ -22,7 +22,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 extras_require = {
     "aws": ["boto3"],
-    "gcp": ["google-cloud-kms", "google-cloud-datastore"],
+    "gcp": ["google-cloud-kms<2.0.0", "google-cloud-datastore"],
 }
 
 extras_require["cli"] = sum(extras_require.values(), ["click"])
@@ -33,6 +33,7 @@ extras_require["test"] = [
     "mock",
     "flake8",
     "moto",
+    'black; python_version >= "3.6.0"',
 ]
 
 

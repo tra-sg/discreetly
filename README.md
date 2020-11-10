@@ -134,7 +134,7 @@ acme.get('acme/prod/postgres/password') # no need to specify the keyid for get
 
 ## Development
 
-`discreetly` is written in Python and supports Python 2.7 and 3.3+.
+`discreetly` is written in Python and supports Python 2.7 and 3.6+.
 
 After cloning the repo, run `pip install -r requirements.txt` to install the required development dependencies (e.g. pytest, flake8, etc.)
 
