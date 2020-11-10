@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [v0.1.2] - 2020-10-10
+
+### Added
+
+- Pin down `google-cloud-kms` to `1.4.0`, and update `pip cache` for tests ([#11])
+- chore: Fix setup.py description and README.md release instructions ([#8])
+- Add template for PRs and commits
+
 ## [v0.1.1] - 2019-12-24
 
 ### Added
@@ -21,7 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release: support for AWS KMS + Parameter Store and GCP KMS + Datastore
 
-[unreleased]: https://github.com/tra-sg/discreetly/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/tra-sg/discreetly/compare/v0.1.2...HEAD
+[v0.1.1]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.2
 [v0.1.1]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.1
 [v0.1.0]: https://github.com/tra-sg/discreetly/releases/tag/v0.1.0
 [#1]: https://github.com/tra-sg/discreetly/issues/1
+[#8]: https://github.com/tra-sg/discreetly/pull/8/
+[#11]: https://github.com/tra-sg/discreetly/pull/11/
