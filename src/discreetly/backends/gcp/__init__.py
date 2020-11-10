@@ -93,14 +93,16 @@ class GCPBackend(with_metaclass(ABCMeta, AbstractBackend)):
         if cryptokey is None:
             cryptokey = self.default_keyid
             logger.warn("No cryptokey specified. Trying default")
-        response = self.kms_client.decrypt(cryptokey, ciphertext)
+        response = self.kms_client.decrypt(
+            request={"name": cryptokey, "ciphertext": ciphertext}
+        )
         return response.plaintext.decode()
 
     def _encrypt_value(self, plaintext, cryptokey=None):
         if cryptokey is None:
             cryptokey = self.default_keyid
         response = self.kms_client.encrypt(
-            cryptokey, plaintext.encode("utf-8")
+            request={"name": cryptokey, "plaintext": plaintext.encode("utf-8")}
         )
         return response.ciphertext
 

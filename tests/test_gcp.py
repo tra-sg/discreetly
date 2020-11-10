@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import pytest
 import discreetly
 import mock
-from google.cloud.kms_v1.proto import service_pb2
+from google.cloud.kms_v1.types import service
 
 # Unit testing GCP services is not straightforward. There isn't presently
 # anything like a library equivalent to moto for google.cloud.*
@@ -14,6 +14,7 @@ from google.cloud.kms_v1.proto import service_pb2
 #
 #   * https://github.com/googleapis/google-cloud-python/tree/master/datastore/tests/unit  # noqa: E501
 #   * https://github.com/googleapis/google-cloud-python/blob/master/kms/tests/unit/gapic/v1/test_key_management_service_client_v1.py  # noqa: E501
+#   * https://googleapis.dev/python/cloudkms/2.2.0/kms_v1/services.html # noqa: E501
 #
 
 
@@ -39,11 +40,11 @@ def mock_env(monkeypatch):
 
 
 def decrypt_response(plaintext):
-    return service_pb2.DecryptResponse(plaintext=plaintext.encode("utf-8"))
+    return service.DecryptResponse(plaintext=plaintext.encode("utf-8"))
 
 
 def encrypt_response(ciphertext):
-    return service_pb2.EncryptResponse(ciphertext=ciphertext.encode("utf-8"))
+    return service.EncryptResponse(ciphertext=ciphertext.encode("utf-8"))
 
 
 def decrypt_request(ciphertext, cryptokey):
@@ -67,7 +68,9 @@ def test_gcp_get(datastore_client, kms_client, config_fixture):
 
     s = discreetly.Session.create(config_fixture)
     assert s.get("testy/foo/bar/baz") == plaintext
-    kms_client.return_value.decrypt.assert_called_with(cryptokey, ciphertext)
+    kms_client.return_value.decrypt.assert_called_with(
+        request={"name": cryptokey, "ciphertext": ciphertext}
+    )
 
 
 @mock.patch("google.cloud.kms.KeyManagementServiceClient", autospec=True)
@@ -84,7 +87,7 @@ def test_gcp_set(datastore_client, kms_client, config_fixture):
 
     datastore_client.return_value.put.assert_called_once()
     kms_client.return_value.encrypt.assert_called_with(
-        cryptokey, plaintext.encode("utf-8")
+        request={"name": cryptokey, "plaintext": plaintext.encode("utf-8")}
     )
 
 
